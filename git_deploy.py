@@ -35,7 +35,7 @@ def create_ignore(folder_path):
                 bind_mnt = nome_volume.split(':')[0]
                 
                 if not bind_mnt.startswith("./") and not bind_mnt.startswith("/"): continue
-                
+
                 bind_mnt = re.sub(r'^./', r'', bind_mnt)
                 bind_mnt = bind_mnt if bind_mnt.endswith("/") else bind_mnt + "/"
                 ignore_dirs.add("\n" + bind_mnt)
@@ -48,11 +48,10 @@ def initialize(folder_path):
     try:
         subprocess.run(["git", "config", "--global", "user.name", "vulnbox"], cwd=folder_path, check=True)
         subprocess.run(["git", "config", "--global", "user.email", "vulnbox@cyberchallenge"], cwd=folder_path, check=True)
-        subprocess.run(["git", "init"], cwd=folder_path, check=True)
+        subprocess.run(["git", "init"], cwd=folder_path, check=False)
         subprocess.run(["git", "add", "."], cwd=folder_path, check=True)
         subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=folder_path, check=True)
-        with suppress(subprocess.CalledProcessError):
-            subprocess.run(["git", "branch", "backup"], cwd=folder_path, check=True)
+        subprocess.run(["git", "branch", "backup"], cwd=folder_path, check=False)
         print(f"[↑] Creato repository {folder_path}")
     except subprocess.CalledProcessError as e:
         print(f"[!] Errore in {folder_path}: {e}")
