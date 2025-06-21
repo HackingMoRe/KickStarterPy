@@ -4,7 +4,7 @@ from pathlib import Path
 from dotenv import load_dotenv
 from os import getenv
 from contextlib import suppress
-import yaml
+import yaml, re
 
 load_dotenv()
 LOCAL_BASE_PATH = getenv("LOCAL_BASE_PATH")
@@ -32,10 +32,13 @@ def create_ignore(folder_path):
             if not volumi_servizio: continue
             
             for nome_volume in volumi_servizio:
-                bind_mnt: str = nome_volume.split(':')[0]
-                if bind_mnt.startswith("./") or bind_mnt.startswith("/"):
-                    bind_mnt = bind_mnt if bind_mnt.endswith("/") else bind_mnt + "/"
-                    ignore_dirs.add("\n" + bind_mnt)
+                bind_mnt = nome_volume.split(':')[0]
+                
+                if not bind_mnt.startswith("./") and not bind_mnt.startswith("/"): continue
+                
+                bind_mnt = re.sub(r'^./', r'', bind_mnt)
+                bind_mnt = bind_mnt if bind_mnt.endswith("/") else bind_mnt + "/"
+                ignore_dirs.add("\n" + bind_mnt)
     
     with open(git_ignore, 'a') as f_ignore:
         f_ignore.writelines(ignore_dirs)
