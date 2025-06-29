@@ -1,10 +1,10 @@
 import os
+import re
 import subprocess
 from contextlib import suppress
 from os import getenv
 from pathlib import Path
 
-import re
 import yaml
 from dotenv import load_dotenv
 
@@ -12,11 +12,14 @@ load_dotenv()
 LOCAL_BASE_PATH = getenv("LOCAL_BASE_PATH")
 
 
-def create_ignore(folder_path):
-    docker_compose_yml = Path(os.path.join(folder_path, "docker-compose.yml"))
-    docker_compose_yaml = Path(os.path.join(folder_path, "docker-compose.yaml"))
-    docker_compose = docker_compose_yml if docker_compose_yml.is_file() else docker_compose_yaml
+def get_docker_compose(path):
+    docker_compose_yml = Path(os.path.join(path, "docker-compose.yml"))
+    docker_compose_yaml = Path(os.path.join(path, "docker-compose.yaml"))
+    return docker_compose_yml if docker_compose_yml.is_file() else docker_compose_yaml
 
+
+def create_ignore(folder_path):
+    docker_compose = get_docker_compose(folder_path)
     if not docker_compose.is_file(): return
     print(f"Trovato {docker_compose}")
 
@@ -61,17 +64,21 @@ def initialize(folder_path):
         print(f"[!] Errore in {folder_path}: {e}")
 
 
-def main():
-    print(LOCAL_BASE_PATH)
+def get_services(base_path):
     with open("blacklist_git_deploy", 'r') as bf:
         blacklist = [line.strip() for line in bf]
-    dirs = filter(
-        lambda x: (os.path.isdir(x) and os.path.split(x)[1] not in blacklist),
-        map(
-            lambda d: os.path.join(LOCAL_BASE_PATH, d),
-            os.listdir(LOCAL_BASE_PATH)
+        return filter(
+            lambda x: (os.path.isdir(x) and os.path.split(x)[1] not in blacklist),
+            map(
+                lambda d: os.path.join(base_path, d),
+                os.listdir(base_path)
+            )
         )
-    )
+
+
+def main():
+    print(LOCAL_BASE_PATH)
+    dirs = get_services(LOCAL_BASE_PATH)
 
     for dir_path in dirs:
         create_ignore(dir_path)

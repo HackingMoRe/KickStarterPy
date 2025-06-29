@@ -1,3 +1,7 @@
 dotenv==0.9.9
 python-dotenv==1.1.0
 PyYAML==6.0.2
+
+yaml~=0.2.5
+pathlib~=1.0.1
+requests~=2.31.0
