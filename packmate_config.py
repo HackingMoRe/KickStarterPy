@@ -32,16 +32,16 @@ def main():
             content = f.read()
             compose_yaml = yaml.safe_load(content.strip())
 
-        #with suppress(Exception):
-        servizi = compose_yaml.get('services', {})
+        with suppress(Exception):
+            servizi = compose_yaml.get('services', {})
 
-        for nome_servizio, config_servizio in servizi.items():
-            porte = config_servizio.get('ports', [])
-            if not porte: continue
+            for nome_servizio, config_servizio in servizi.items():
+                porte = config_servizio.get('ports', [])
+                if not porte: continue
 
-            for porta in porte:
-                session.post(URL + "/api/service/", json={"name": os.path.split(dir_path)[1] + " " + nome_servizio, "port": porta.split(':')[0]})
-                # print(f"{os.path.split(dir_path)[1]} {nome_servizio} -> {porta.split(':')[0]}")
+                for porta in porte:
+                    session.post(URL + "/api/service/", json={"name": os.path.split(dir_path)[1] + " " + nome_servizio, "port": porta.split(':')[0]})
+                    # print(f"{os.path.split(dir_path)[1]} {nome_servizio} -> {porta.split(':')[0]}")
 
 
 
