@@ -2,6 +2,5 @@ dotenv
 python-dotenv
 PyYAML
 
-yaml
 pathlib
 requests
