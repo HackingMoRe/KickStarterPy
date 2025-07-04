@@ -18,8 +18,10 @@ def get_docker_compose(path):
 
 
 def create_ignore(folder_path):
-    docker_compose = get_docker_compose(folder_path)
-    if not docker_compose.is_file(): return
+    try: docker_compose = get_docker_compose(folder_path)
+    except Exception: return
+    
+    if not docker_compose.is_file() or not docker_compose: return
     print(f"Trovato {docker_compose}")
 
     with open(docker_compose, 'r') as f:
