@@ -29,7 +29,8 @@ def main():
     print(f"Pattern creation status: {ret.status_code}")
     dirs = get_services(LOCAL_BASE_PATH)
     for dir_path in dirs:
-        docker_compose = get_docker_compose(dir_path)
+        try: docker_compose = get_docker_compose(dir_path)
+        except Exception: continue
         if not docker_compose.is_file(): continue
 
         with open(docker_compose, 'r') as f:
