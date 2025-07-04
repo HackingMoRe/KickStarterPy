@@ -41,12 +41,13 @@ def main():
             print(f"Trovati {len(servizi)} servizi in {os.path.split(dir_path)[1]}")
 
             for nome_servizio, config_servizio in servizi.items():
-                porte = config_servizio.get('ports', [])
-                if not porte: continue
+                port_mappings = config_servizio.get('ports', [])
+                if not port_mappings: continue
 
-                for porta in porte:
-                    resp = session.post(URL + "/api/service/", json={"name": os.path.split(dir_path)[1] + " " + nome_servizio, "port": porta.split(':')[0]})
-                    print(f"{os.path.split(dir_path)[1]} {nome_servizio} -> {porta.split(':')[0]}")
+                for port_mapping in port_mappings:
+                    port = port_mapping.split(':')[-2]
+                    resp = session.post(URL + "/api/service/", json={"name": os.path.split(dir_path)[1] + " " + nome_servizio, "port": port})
+                    print(f"{os.path.split(dir_path)[1]} {nome_servizio} -> {port}")
 
 
 
