@@ -1,11 +1,9 @@
-import os
-import re
+import os, re, yaml, glob
 import subprocess
 from contextlib import suppress
 from os import getenv
 from pathlib import Path
 
-import yaml
 from dotenv import load_dotenv
 
 load_dotenv()
@@ -13,9 +11,9 @@ LOCAL_BASE_PATH = getenv("LOCAL_BASE_PATH")
 
 
 def get_docker_compose(path):
-    docker_compose_yml = Path(os.path.join(path, "docker-compose.yml"))
-    docker_compose_yaml = Path(os.path.join(path, "docker-compose.yaml"))
-    return docker_compose_yml if docker_compose_yml.is_file() else docker_compose_yaml
+    docker_compose_yml = glob.glob(os.path.join(path, "*compose.yml"))
+    docker_compose_yaml = glob.glob(os.path.join(path, "*compose.yaml"))
+    return docker_compose_yml[0] if not docker_compose_yml else docker_compose_yaml
 
 
 def create_ignore(folder_path):
