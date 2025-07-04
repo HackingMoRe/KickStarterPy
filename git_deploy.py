@@ -13,7 +13,8 @@ LOCAL_BASE_PATH = getenv("LOCAL_BASE_PATH")
 def get_docker_compose(path):
     docker_compose_yml = glob.glob(os.path.join(path, "*compose.yml"))
     docker_compose_yaml = glob.glob(os.path.join(path, "*compose.yaml"))
-    return docker_compose_yml[0] if not docker_compose_yml else docker_compose_yaml
+    docker_compose = docker_compose_yml[0] if docker_compose_yml else docker_compose_yaml[0]
+    return Path(docker_compose)
 
 
 def create_ignore(folder_path):
@@ -51,8 +52,7 @@ def create_ignore(folder_path):
 def initialize(folder_path):
     try:
         subprocess.run(["git", "config", "--global", "user.name", "vulnbox"], cwd=folder_path, check=True)
-        subprocess.run(["git", "config", "--global", "user.email", "vulnbox@cyberchallenge"], cwd=folder_path,
-                       check=True)
+        subprocess.run(["git", "config", "--global", "user.email", "vulnbox@cyberchallenge"], cwd=folder_path, check=True)
         subprocess.run(["git", "init"], cwd=folder_path, check=False)
         subprocess.run(["git", "add", "."], cwd=folder_path, check=True)
         subprocess.run(["git", "commit", "-m", "Initial commit"], cwd=folder_path, check=True)
