@@ -8,6 +8,8 @@ from dotenv import load_dotenv
 
 load_dotenv()
 LOCAL_BASE_PATH = getenv("LOCAL_BASE_PATH")
+VULNBOX_IP = getenv("VULNBOX_IP", "10.60.0.1")
+
 
 
 def get_docker_compose(path):
@@ -88,7 +90,7 @@ def main():
             initialize(dir_path)
 
             # Scrive la riga nel file
-            f.write(f"git clone root@vulnbox:{dir_path}\n")
+            f.write(f"git clone root@{VULNBOX_IP}:{dir_path}\n")
         f.write(f"ssh -L 42069:127.0.0.1:42069 -L 65007:127.0.0.1:65007 root@vulnbox\n")
 
 
