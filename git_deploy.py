@@ -80,10 +80,16 @@ def main():
     print(LOCAL_BASE_PATH)
     dirs = get_services(LOCAL_BASE_PATH)
 
-    for dir_path in dirs:
-        create_ignore(dir_path)
-        print(f"📁 Trovata cartella: {dir_path}")
-        initialize(dir_path)
+    with open("clone_commands.txt", "a") as f:
+        for dir_path in dirs:
+            create_ignore(dir_path)
 
+            print(f"📁 Trovata cartella: {dir_path}")
+            initialize(dir_path)
+
+            # Scrive la riga nel file
+            f.write(f"git clone root@vulnbox:{dir_path}\n")
+        f.write(f"ssh -L 42069:127.0.0.1:42069 root@vulnbox\n")
+        f.write(f"ssh -L 65007:127.0.0.1:65007 root@vulnbox\n")
 
 if __name__ == "__main__": main()
