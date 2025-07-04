@@ -66,7 +66,7 @@ def get_services(base_path):
     with open("blacklist_git_deploy", 'r') as bf:
         blacklist = [line.strip() for line in bf]
         return filter(
-            lambda x: (os.path.isdir(x) and os.path.split(x)[1] not in blacklist),
+            lambda x: (os.path.isdir(x) and not os.path.basename(x).startswith('.') and os.path.basename(x) not in blacklist),
             map(
                 lambda d: os.path.join(base_path, d),
                 os.listdir(base_path)
