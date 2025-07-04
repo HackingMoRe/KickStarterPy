@@ -91,7 +91,7 @@ def main():
 
             # Scrive la riga nel file
             f.write(f"git clone root@{VULNBOX_IP}:{dir_path}\n")
-        f.write(f"ssh -L 42069:127.0.0.1:42069 -L 65007:127.0.0.1:65007 root@vulnbox\n")
+        f.write(f"ssh -L 42069:127.0.0.1:42069 -L 65007:127.0.0.1:65007 root@{VULNBOX_IP}\n")
 
 
 if __name__ == "__main__": main()
